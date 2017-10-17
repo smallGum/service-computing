@@ -22,7 +22,7 @@ USAGE: ./selpg -s start_page -e end_page [ -f=true|false | -l lines_per_page ] [
 -l int
 	specify the number of lines in one page (optional) (default 72)
 -d string
-	specify the destination, usually another program or command, to process the output. It     is just like a hand-writing channel (optional) (default stdout)
+	specify the destination, usually another program or command, to process the output. It is just like a hand-writing channel (optional) (default stdout)
 in_filename string
 	the name of the input file (optional) (default stdin)
 ```
@@ -38,8 +38,6 @@ step 3: acts what those arguments say
 step 4: show the output
 ```
 
-### `flag`
-
 To implement step 1-4, we first need to create a `selpgArgs struct` to save arguments:
 
 ```go
@@ -54,7 +52,38 @@ type selpgArgs struct {
 }
 ```
 
-Next, we should use the standard library `flag` to help us to read and parse arguments from command. By using `flag` , we can recognize each argument and set their default value. However, the flag parser only supports for three format of inputting arguments:
+Next, we define the following functions to implement relative operations:
+
+```go
+/**
+* diplay the error and usage of selpg
+* @param err the error message
+ */
+func printError(err string) {}
+
+/**
+* split the arguments of command to initial the selpgArgs instance
+* @param saAddr a pointer to a selpgArgs instance
+ */
+func initSelpgArgs(saAddr *selpgArgs) {}
+
+/**
+* do operation correspoding to the arguments of command
+ */
+func runCommand() {}
+```
+
+And finally, the main function is very simple:
+
+```go
+func main() {
+	runCommand()
+}
+```
+
+### `flag`
+
+We should use the standard library `flag` to help us to read and parse arguments from command. By using `flag` , we can recognize each argument and set their default value. However, the flag parser only supports for three format of inputting arguments:
 
 ```shell
 -flag
@@ -240,7 +269,7 @@ No. 72 line of No.2 page
 ./selpg: done
 ```
 
-Use hand-writing channel:
+Use hand-writing channel to pipe the output to sort:
 
 ```shell
 ./selpg -s 1 -e 2 -d "sort -r" inputFile
@@ -271,3 +300,34 @@ No. 10 line of No.2 page
 No. 10 line of No.1 page
 ./selpg: done
 ```
+some invalid inputs:
+
+```shell
+./selpg -s 4 -e 1
+end page must be set to be grater than or equal to start page!
+
+USAGE: ./selpg -s start_page -e end_page [ -f=true|false | -l lines_per_page ] [ -d dest ] [ in_filename ]
+```
+
+```shell
+./selpg -s -4 -e 1
+start page must be set to be greater than 0!
+
+USAGE: ./selpg -s start_page -e end_page [ -f=true|false | -l lines_per_page ] [ -d dest ] [ in_filename ]
+```
+
+```shell
+./selpg -s 1 -e 1 -d lp inputFile
+lp: Error - no default destination available.
+print error!
+
+USAGE: ./selpg -s start_page -e end_page [ -f=true|false | -l lines_per_page ] [ -d dest ] [ in_filename ]
+```
+
+```shell
+./selpg -s 1 -e 1 notExitFile
+could not open input file "notExitFile"!
+
+USAGE: ./selpg -s start_page -e end_page [ -f=true|false | -l lines_per_page ] [ -d dest ] [ in_filename ]
+```
+
