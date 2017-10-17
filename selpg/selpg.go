@@ -142,6 +142,7 @@ func runCommand() {
 	if args.printDest != "" {
 		cmd.Stdin = strings.NewReader(rst)
 		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
 		err = cmd.Run()
 		if err != nil {
 			printError("print error!")
