@@ -14,8 +14,8 @@
 
 package main
 
-import "service-computing/cobra-small-case/cmd"
+import "service-computing/testcobra/parse"
 
 func main() {
-	cmd.Execute()
+	parse.Execute()
 }

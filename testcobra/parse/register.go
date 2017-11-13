@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package parse
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -32,13 +33,14 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		username, _ := cmd.Flags().GetString("user")
-		fmt.Println("register called by " + username)
+		users := strings.Split(username, "+")
+		fmt.Println("register called by " + users[0] + users[1])
 	},
 }
 
 func init() {
+	registerCmd.Flags().StringP("user", "u", "", "Help message for username")
 	RootCmd.AddCommand(registerCmd)
-	registerCmd.Flags().StringP("user", "u", "Anonymous", "Help message for username")
 
 	// Here you will define your flags and configuration settings.
 
