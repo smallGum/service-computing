@@ -6,5 +6,10 @@
   border-width: 1px;
   border-color: grey;
   padding: 10px;
-  height: 922px;
+  height: 542px;
+}
+
+.reg-form {
+  width: 100px;
+  margin-left: 302px;
 }

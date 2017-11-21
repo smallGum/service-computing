@@ -32,6 +32,8 @@ func initRouter(r *mux.Router, formatter *render.Render) {
 	}
 
 	r.HandleFunc("/", homeHandler(formatter)).Methods("GET")
+	r.HandleFunc("/register", formHandler(formatter)).Methods("POST")
+	r.HandleFunc("/unknown", NotImplemented)
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir(webRoot + "/assets/")))
 }
 

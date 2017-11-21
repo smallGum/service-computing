@@ -7,6 +7,15 @@ $(document).ready(function() {
         $('.greeting-date').append(data.date).hide();
     });
 
+    $.ajax({
+        url: "/register"
+    }).then(function(data) {
+        $('.greeting-id').append(data.id);
+        $('.greeting-username').append(data.username);
+        $('.greeting-subject').append(data.subject);
+        $('.greeting-score').append(data.score);
+    });
+
     $('.info').click(function() {
         $('.info').hide();
         $('.greeting-author').show();

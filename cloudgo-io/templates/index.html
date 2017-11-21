@@ -9,6 +9,17 @@
     <div class="intro">
       <h1>Grade Management System</h1>
       <p>Welcome to grade management system! You can register your grade in the following chart.</p>
+
+      <div class="reg-form">
+        <form action="/register" method="post">
+          <p>student ID: <input type="text" name="id"></p>
+          <p>user name: <input type="text" name="username"> </p>
+          <p>subject: <input type="text" name="subject"> </p>
+          <p>score: <input type="text" name="score"> </p>
+          <p><input type="submit" value="register"> </p>
+        </form>
+      </div>
+
       <p>For more information of this system, please click the info button.</p>
       <button class="info">info</button>
       <p class="greeting-author">{{.Author}}</p>

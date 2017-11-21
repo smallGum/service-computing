@@ -1,0 +1,32 @@
+<html>
+    <head>
+      <link rel="stylesheet" href="css/main.css" />
+      <script src="http://code.jquery.com/jquery-latest.js"></script>
+      <script src="js/getData.js"></script>
+    </head>
+  
+    <body>
+      <div class="intro">
+        <h1>Grade Management System</h1>
+        <p>Your grade has been registered! Here is the information you enter:</p>
+  
+        <div class="reg-table">
+          <table border="5">
+              <tr>
+                  <th>Student ID</th>
+                  <th>User Name</th>
+                  <th>Subject</th>
+                  <th>Score</th>
+              </tr>
+              <tr>
+                  <td class="greeting-id">{{.ID}}</td>
+                  <td class="greeting-username">{{.UserName}}</td>
+                  <td class="greeting-subject">{{.Subject}}</td>
+                  <td class="greeting-score">{{.Score}}</td>
+              </tr>
+          </table>
+        </div>
+      </div>
+    </body>
+  </html>
+  
