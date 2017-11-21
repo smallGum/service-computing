@@ -1,6 +1,8 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/main.css" />
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/getData.js"></script>
   </head>
 
   <body>
@@ -9,6 +11,9 @@
       <p>Welcome to grade management system! You can register your grade in the following chart.</p>
       <p>For more information of this system, please click the info button.</p>
       <button class="info">info</button>
+      <p class="greeting-author">{{.Author}}</p>
+      <p class="greeting-os">{{.OS}}</p>
+      <p class="greeting-date">{{.Date}}</p>
     </div>
   </body>
 </html>
