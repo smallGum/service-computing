@@ -1,15 +1,29 @@
 package entities
 
 import (
+	"database/sql"
 	"errors"
 	"reflect"
 	"service-computing/orm-engine/sqlt"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // ORMEngine definition
 type ORMEngine struct {
 	sqlt.SQLTemplate
+}
+
+// NewEngine create a new engine for database operation
+func NewEngine(driverName, dataSourceName string) *ORMEngine {
+	db, err := sql.Open(driverName, dataSourceName)
+	if err != nil {
+		panic(err)
+	}
+	engine := &ORMEngine{sqlt.NewSQLTemplate(db)}
+
+	return engine
 }
 
 // Insert insert new data entry into the table
@@ -45,43 +59,28 @@ func (e *ORMEngine) Find(o interface{}) error {
 		return err
 	}
 
-	rows, _ := e.Query(queryString)
+	rows, err := e.Query(queryString)
+	if err != nil {
+		return err
+	}
 
 	columns, _ := rows.Columns()
 	count := len(columns)
 	values := make([]interface{}, count)
-	valuePtrs := make([]interface{}, count)
 	newSlice := reflect.MakeSlice(sliceValue.Type(), 0, 4)
 
 	for rows.Next() {
-		for i, _ := range columns {
-			valuePtrs[i] = &values[i]
+		pv := reflect.New(data)
+		fieldArr := pv.Elem()
+
+		for i := 0; i < fieldArr.NumField(); i++ {
+			f := fieldArr.Field(i)
+			values[i] = f.Addr().Interface()
 		}
 
-		rows.Scan(valuePtrs...)
+		rows.Scan(values...)
 
-		for i, col := range columns {
-			var v interface{}
-			val := values[i]
-			b, ok := val.([]byte)
-			pv := reflect.New(data)
-			element := pv.Elem()
-
-			if ok {
-				v = string(b)
-			} else {
-				v = val
-			}
-
-			for j := 0; j < data.NumField(); j++ {
-				if strings.ToLower(data.Field(j).Name) == col {
-					element.Field(j).Set(reflect.ValueOf(v))
-					break
-				}
-			}
-
-			newSlice = reflect.Append(newSlice, pv)
-		}
+		newSlice = reflect.Append(newSlice, pv)
 	}
 
 	s := reflect.ValueOf(o).Elem()
@@ -147,5 +146,5 @@ func genQueryStmt(tableName string) (string, error) {
 		return "", errors.New("non-exist interface type")
 	}
 
-	return "SELECT * FROM " + tableName, nil
+	return "SELECT * FROM " + strings.ToLower(tableName), nil
 }
